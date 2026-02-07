@@ -1,6 +1,6 @@
 app_name = "librinexus"
 app_title = "LibriNexus Enterprise"
-app_publisher = "An advanced LMS with Google Books API and Financial Logic."
+app_publisher = "Cynthia Moraa"
 app_description = "An advanced LMS with Google Books API and Financial Logic."
 app_email = "cynthiamogaka49@gmail.com"
 app_license = "mit"

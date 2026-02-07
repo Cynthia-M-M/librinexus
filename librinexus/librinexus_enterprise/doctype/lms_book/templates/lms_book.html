@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ doc.title }} | LibriNexus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html { scroll-behavior: smooth; }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans antialiased pb-24 relative">
+
+    <nav class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="/library" class="flex items-center gap-2 group">
+                    <span class="text-2xl group-hover:scale-110 transition">⚡</span>
+                    <span class="text-xl font-black text-gray-900 tracking-tighter">Libri<span class="text-orange-600">Nexus</span></span>
+                </a>
+
+                <div class="flex items-center gap-6">
+                    <a href="/library" class="text-sm font-bold text-gray-500 hover:text-orange-600 hidden md:block">Back to Store</a>
+                    
+                    <a href="/cart" class="relative cursor-pointer hover:scale-110 transition">
+                        <span class="text-2xl">🛒</span>
+                        <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 mt-6">
+        
+        <div class="text-xs text-gray-400 mb-4">
+            <a href="/library" class="hover:text-orange-500">Store</a> / 
+            <span class="text-gray-900 font-bold">{{ doc.title }}</span>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
+                
+                <div class="bg-gray-100 p-10 flex items-center justify-center relative">
+                    <div class="relative w-64 md:w-80 shadow-2xl rounded-lg overflow-hidden transform transition hover:scale-105 duration-500">
+                        {% if doc.cover_image %}
+                            <img src="{{ doc.cover_image }}" class="w-full object-cover">
+                        {% else %}
+                            <div class="h-96 w-full bg-gray-300 flex items-center justify-center text-4xl">📖</div>
+                        {% endif %}
+                        
+                        {% if doc.is_premium %}
+                        <div class="absolute top-0 right-0 bg-yellow-400 text-black text-xs font-bold px-3 py-1 rounded-bl-lg shadow-md">
+                            PREMIUM
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="p-8 md:p-12 flex flex-col justify-center relative">
+                    <div class="mb-4">
+                        <span class="text-orange-600 font-bold tracking-wider uppercase text-xs bg-orange-100 px-2 py-1 rounded">{{ doc.category }}</span>
+                        <h1 class="text-3xl md:text-5xl font-black text-gray-900 leading-tight mt-3 mb-2">{{ doc.title }}</h1>
+                        <p class="text-lg text-gray-500">By <span class="text-gray-900 font-semibold">{{ doc.author }}</span></p>
+                    </div>
+
+                    <div class="border-t border-b border-gray-100 py-6 mb-6">
+                        <div class="flex items-end gap-3">
+                            <span class="text-5xl font-black text-gray-900 tracking-tight">KSh {{ doc.price }}</span>
+                        </div>
+                        <p class="text-xs text-green-600 font-bold mt-2 flex items-center gap-1">
+                            <span>✅</span> In Stock & Ready to Ship
+                        </p>
+                    </div>
+
+                    <div class="mb-8">
+                        <h3 class="font-bold text-gray-900 mb-2">About this book</h3>
+                        <p class="text-gray-600 leading-relaxed text-sm">
+                            {{ doc.description or "No description available for this title." }}
+                        </p>
+                    </div>
+
+                    <div class="flex gap-4 flex-col md:flex-row">
+                        <a href="https://wa.me/254700000000?text=Hi, I want to buy *{{ doc.title }}* for KSh {{ doc.price }}." target="_blank" 
+                           class="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-green-200 transition transform hover:-translate-y-1 text-center flex items-center justify-center gap-2">
+                            <span>📲</span> Buy on WhatsApp
+                        </a>
+                        
+                        <button onclick="addToCart()" class="flex-1 bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl shadow-lg transition transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2">
+                            <span>🛒</span> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 mt-16 mb-20" id="related-section">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 border-l-4 border-orange-500 pl-4">Similar Books</h2>
+        
+        {% set related_books = frappe.get_all("LMS Book", 
+            filters={"category": doc.category, "name": ["!=", doc.name]}, 
+            fields=["route", "cover_image", "title", "price"], 
+            limit=5) 
+        %}
+
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {% for related in related_books %}
+            <a href="/{{ related.route }}" class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition text-center group block">
+                <div class="h-40 bg-gray-100 rounded-lg mb-3 overflow-hidden">
+                    {% if related.cover_image %}
+                    <img src="{{ related.cover_image }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    {% else %}
+                    <div class="w-full h-full flex items-center justify-center text-2xl">📖</div>
+                    {% endif %}
+                </div>
+                <h3 class="font-bold text-gray-900 text-sm truncate">{{ related.title }}</h3>
+                <p class="text-xs text-orange-600 font-bold mt-1">KSh {{ related.price }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
+        class="fixed bottom-6 right-6 bg-orange-600 text-white p-3 rounded-full shadow-2xl z-50 hover:bg-orange-700 transition transform hover:scale-110 opacity-80 hover:opacity-100">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+    </button>
+
+    <div id="toast" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full shadow-2xl opacity-0 transition duration-500 pointer-events-none z-50 flex items-center gap-2">
+        <span>✅</span> Added to Cart!
+    </div>
+
+    <script>
+        // 1. UPDATE CART BADGE ON LOAD
+        function updateBadge() {
+            const cart = JSON.parse(localStorage.getItem('nexusCart') || "[]");
+            const badge = document.getElementById('cart-badge');
+            if(badge) badge.innerText = cart.length;
+        }
+        updateBadge(); // Run immediately
+
+        // 2. ADD TO CART FUNCTION
+        function addToCart() {
+            // Get current book details
+            const book = {
+                title: "{{ doc.title }}",
+                price: "{{ doc.price }}",
+                image: "{{ doc.cover_image or '' }}",
+                author: "{{ doc.author }}"
+            };
+
+            // Get existing cart
+            const cart = JSON.parse(localStorage.getItem('nexusCart') || "[]");
+            
+            // Add new book
+            cart.push(book);
+            
+            // Save back to storage
+            localStorage.setItem('nexusCart', JSON.stringify(cart));
+
+            // Update UI
+            updateBadge();
+            
+            // Show Toast
+            const toast = document.getElementById('toast');
+            if(toast) {
+                toast.classList.remove('opacity-0', 'translate-y-10');
+                setTimeout(() => toast.classList.add('opacity-0', 'translate-y-10'), 2000);
+            }
+        }
+    </script>
+
+</body>
+</html>
