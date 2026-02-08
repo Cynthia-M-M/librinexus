@@ -1,20 +1,18 @@
-
 # ⚡ LibriNexus Enterprise
 
-[![Frappe Version](https://img.shields.io/badge/Frappe-v15-blue?style=flat-square&logo=frappe)]( https://unodoriferous-rosario-unspeared.ngrok-free.dev)
-[![Live Demo](https://img.shields.io/badge/Demo-Live%20App-success?style=flat-square&logo=google-chrome&logoColor=white)]( https://unodoriferous-rosario-unspeared.ngrok-free.dev)
+[![Live Demo](https://img.shields.io/badge/Demo-Live%20App-success?style=flat-square&logo=google-chrome&logoColor=white)](https://unodoriferous-rosario-unspeared.ngrok-free.dev)
+![Frappe Version](https://img.shields.io/badge/Frappe-v16-blue?style=flat-square&logo=frappe)
 [![UI](https://img.shields.io/badge/UI-Tailwind%20CSS-38bdf8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
 [![License](https://img.shields.io/badge/License-MIT-gray?style=flat-square)]()
 
 **An advanced Library Management System & Digital Storefront.**
-Built for the **Stelden Skillset Showcase**, this application merges a robust Librarian Backend with a modern, consumer-facing E-Commerce Frontend.
+This application merges a robust Librarian Backend with a modern, consumer-facing E-Commerce Frontend.
 
 ---
 
 ## 🟢 Live Demo
-**Click here to test the application:**
-### [🔗 Launch LibriNexus Live]( https://unodoriferous-rosario-unspeared.ngrok-free.dev)
-*(Hosted on ngrok)*
+**Click below to test the application:**
+### [🔗 Launch LibriNexus Live](https://unodoriferous-rosario-unspeared.ngrok-free.dev)
 
 ---
 
@@ -55,35 +53,10 @@ bench install-app librinexus
 
 ```
 
-## 🤝 Contributing & Standards
-
-This app follows strict Frappe coding standards using `pre-commit` for formatting and linting.
-
-```bash
-cd apps/librinexus
-pre-commit install
-
-```
-
-**Tools used:**
-
-* `Ruff` (Python Linting)
-* `Prettier` (JS/HTML Formatting)
-* `ESLint` (JS Quality)
-
-## ⚙️ CI / CD
-
-This app uses GitHub Actions for Continuous Integration:
-
-* **CI:** Runs unit tests on every push.
-* **Linters:** Runs [Frappe Semgrep Rules](https://github.com/frappe/semgrep-rules) and [pip-audit](https://pypi.org/project/pip-audit/) for security.
-
 ---
 
 ### License
 
 MIT
-
-```
 
 ```
